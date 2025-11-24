@@ -1,0 +1,45 @@
+
+#
+# CprE 381 Generated Quartus Settings File
+#
+
+set_global_assignment -name FAMILY "Cyclone IV E"
+set_global_assignment -name DEVICE EP4CE115F29C7
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 21.1.1
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "19:07:08  JANUARY 28, 2019"
+set_global_assignment -name LAST_QUARTUS_VERSION "21.1.1 Standard Edition"
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name TOP_LEVEL_ENTITY RISCV_Processor
+set_global_assignment -name VHDL_INPUT_VERSION VHDL_2008
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/RISCV_types.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/RISCV_Processor.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/adder_subtractor.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/alu.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/alu_control.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/barrel_shifter.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/control_unit.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/dec5to32.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/dffg.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/fetch_logic.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/imm_gen.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/load_extender.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/mem.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/mux32to1.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/pc_reg.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/regN.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/reg_file.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/store_logic.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/testbench/adder_subtractor_tb.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/testbench/alu_control_tb.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/testbench/alu_tb.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/testbench/barrel_shifter_tb.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/testbench/control_unit_tb.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/testbench/fetch_logic_tb.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/testbench/imm_gen_tb.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/testbench/load_extender_tb.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/testbench/pc_reg_tb.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/testbench/reg_file_tb.vhd"
+set_global_assignment -name VHDL_FILE "/home/jwk0425/cpre381/testProjectPart1/cpre3810-toolflow/proj/src/TopLevel/testbench/store_logic_tb.vhd"

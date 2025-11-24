@@ -1,0 +1,109 @@
+
+#
+# CprE 381 toolflow Timing dump
+#
+
+FMax: 26.34mhz Clk Constraint: 20.00ns Slack: -17.96ns
+
+The path is given below
+
+ ===================================================================
+ From Node    : pc_reg:U_PC|s_PC[5]
+ To Node      : reg_file:U_REGFILE|regN:\gen_regs:13:u_reg|dffg:\gen_bits:20:u_ff|s_Q
+ Launch Clock : iCLK
+ Latch Clock  : iCLK
+ Data Arrival Path:
+ Total (ns)  Incr (ns)     Type  Element
+ ==========  ========= ==  ====  ===================================
+      0.000      0.000           launch edge time
+      3.132      3.132  R        clock network delay
+      3.364      0.232     uTco  pc_reg:U_PC|s_PC[5]
+      3.364      0.000 FF  CELL  U_PC|s_PC[5]|q
+      3.710      0.346 FF    IC  s_IMemAddr[5]~4|datad
+      3.835      0.125 FF  CELL  s_IMemAddr[5]~4|combout
+      6.301      2.466 FF    IC  IMem|ram~50928|datad
+      6.426      0.125 FF  CELL  IMem|ram~50928|combout
+      6.694      0.268 FF    IC  IMem|ram~50929|datab
+      7.119      0.425 FF  CELL  IMem|ram~50929|combout
+      8.787      1.668 FF    IC  IMem|ram~50932|datac
+      9.068      0.281 FF  CELL  IMem|ram~50932|combout
+      9.344      0.276 FF    IC  IMem|ram~50935|dataa
+      9.748      0.404 FF  CELL  IMem|ram~50935|combout
+      9.981      0.233 FF    IC  IMem|ram~50967|datac
+     10.261      0.280 FF  CELL  IMem|ram~50967|combout
+     12.298      2.037 FF    IC  IMem|ram~51010|datad
+     12.423      0.125 FF  CELL  IMem|ram~51010|combout
+     12.693      0.270 FF    IC  IMem|ram~51053|datab
+     13.097      0.404 FF  CELL  IMem|ram~51053|combout
+     13.322      0.225 FF    IC  IMem|ram~51054|datad
+     13.447      0.125 FF  CELL  IMem|ram~51054|combout
+     13.678      0.231 FF    IC  IMem|ram~51225|datad
+     13.803      0.125 FF  CELL  IMem|ram~51225|combout
+     14.706      0.903 FF    IC  U_REGFILE|u_mux1|Mux23~12|datac
+     14.987      0.281 FF  CELL  U_REGFILE|u_mux1|Mux23~12|combout
+     15.217      0.230 FF    IC  U_REGFILE|u_mux1|Mux23~13|datad
+     15.342      0.125 FF  CELL  U_REGFILE|u_mux1|Mux23~13|combout
+     15.795      0.453 FF    IC  U_REGFILE|u_mux1|Mux23~14|datab
+     16.151      0.356 FF  CELL  U_REGFILE|u_mux1|Mux23~14|combout
+     16.376      0.225 FF    IC  U_REGFILE|u_mux1|Mux23~15|datad
+     16.526      0.150 FR  CELL  U_REGFILE|u_mux1|Mux23~15|combout
+     17.729      1.203 RR    IC  U_REGFILE|u_mux1|Mux23~16|datad
+     17.884      0.155 RR  CELL  U_REGFILE|u_mux1|Mux23~16|combout
+     19.242      1.358 RR    IC  U_REGFILE|u_mux1|Mux23~19|datac
+     19.529      0.287 RR  CELL  U_REGFILE|u_mux1|Mux23~19|combout
+     19.756      0.227 RR    IC  s_ALUInputA[8]~31|datad
+     19.911      0.155 RR  CELL  s_ALUInputA[8]~31|combout
+     20.864      0.953 RR    IC  U_ALU|U_SHIFTER|s_stage1[7]~19|datac
+     21.151      0.287 RR  CELL  U_ALU|U_SHIFTER|s_stage1[7]~19|combout
+     21.877      0.726 RR    IC  U_ALU|U_SHIFTER|s_stage1[8]~20|datad
+     22.032      0.155 RR  CELL  U_ALU|U_SHIFTER|s_stage1[8]~20|combout
+     22.694      0.662 RR    IC  U_ALU|U_SHIFTER|s_stage2[8]~2|datad
+     22.849      0.155 RR  CELL  U_ALU|U_SHIFTER|s_stage2[8]~2|combout
+     23.820      0.971 RR    IC  U_ALU|U_SHIFTER|s_stage4[8]~7|datad
+     23.975      0.155 RR  CELL  U_ALU|U_SHIFTER|s_stage4[8]~7|combout
+     24.203      0.228 RR    IC  U_ALU|U_SHIFTER|s_stage16[8]~46|datad
+     24.358      0.155 RR  CELL  U_ALU|U_SHIFTER|s_stage16[8]~46|combout
+     24.563      0.205 RR    IC  U_ALU|U_SHIFTER|s_stage16[8]~47|datad
+     24.718      0.155 RR  CELL  U_ALU|U_SHIFTER|s_stage16[8]~47|combout
+     25.680      0.962 RR    IC  U_ALU|Mux55~6|datad
+     25.835      0.155 RR  CELL  U_ALU|Mux55~6|combout
+     28.243      2.408 RR    IC  DMem|ram~40372|datad
+     28.382      0.139 RF  CELL  DMem|ram~40372|combout
+     28.660      0.278 FF    IC  DMem|ram~40373|dataa
+     29.084      0.424 FF  CELL  DMem|ram~40373|combout
+     29.845      0.761 FF    IC  DMem|ram~40376|datac
+     30.126      0.281 FF  CELL  DMem|ram~40376|combout
+     30.362      0.236 FF    IC  DMem|ram~40379|datac
+     30.643      0.281 FF  CELL  DMem|ram~40379|combout
+     32.033      1.390 FF    IC  DMem|ram~40390|datad
+     32.158      0.125 FF  CELL  DMem|ram~40390|combout
+     32.390      0.232 FF    IC  DMem|ram~40401|datac
+     32.671      0.281 FF  CELL  DMem|ram~40401|combout
+     32.898      0.227 FF    IC  DMem|ram~40444|datad
+     33.023      0.125 FF  CELL  DMem|ram~40444|combout
+     33.251      0.228 FF    IC  DMem|ram~40487|datad
+     33.401      0.150 FR  CELL  DMem|ram~40487|combout
+     35.036      1.635 RR    IC  DMem|ram~41000|datad
+     35.191      0.155 RR  CELL  DMem|ram~41000|combout
+     35.419      0.228 RR    IC  U_LOADEXT|Mux32~0|datad
+     35.574      0.155 RR  CELL  U_LOADEXT|Mux32~0|combout
+     35.809      0.235 RR    IC  U_LOADEXT|Mux0~1|datac
+     36.096      0.287 RR  CELL  U_LOADEXT|Mux0~1|combout
+     36.875      0.779 RR    IC  Mux11~2|datac
+     37.162      0.287 RR  CELL  Mux11~2|combout
+     37.365      0.203 RR    IC  Mux11~3|datad
+     37.520      0.155 RR  CELL  Mux11~3|combout
+     40.998      3.478 RR    IC  U_REGFILE|\gen_regs:13:u_reg|\gen_bits:20:u_ff|s_Q|asdata
+     41.404      0.406 RR  CELL  reg_file:U_REGFILE|regN:\gen_regs:13:u_reg|dffg:\gen_bits:20:u_ff|s_Q
+ Data Required Path:
+ Total (ns)  Incr (ns)     Type  Element
+ ==========  ========= ==  ====  ===================================
+     20.000     20.000           latch edge time
+     23.433      3.433  R        clock network delay
+     23.441      0.008           clock pessimism removed
+     23.421     -0.020           clock uncertainty
+     23.439      0.018     uTsu  reg_file:U_REGFILE|regN:\gen_regs:13:u_reg|dffg:\gen_bits:20:u_ff|s_Q
+ Data Arrival Time  :    41.404
+ Data Required Time :    23.439
+ Slack              :   -17.965 (VIOLATED)
+ ===================================================================

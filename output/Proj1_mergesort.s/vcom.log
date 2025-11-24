@@ -1,0 +1,90 @@
+QuestaSim-64 vcom 2025.1_2 Compiler 2025.04 Apr  7 2025
+Start time: 22:40:54 on Nov 21,2025
+vcom -2008 -work internal/ModelSimContainer/work proj/src/RISCV_types.vhd internal/testpy/tb.vhd proj/src/RISCV_types.vhd proj/src/TopLevel/load_extender.vhd proj/src/TopLevel/dec5to32.vhd proj/src/TopLevel/barrel_shifter.vhd proj/src/TopLevel/mem.vhd proj/src/TopLevel/RISCV_Processor.vhd proj/src/TopLevel/pc_reg.vhd proj/src/TopLevel/store_logic.vhd proj/src/TopLevel/imm_gen.vhd proj/src/TopLevel/alu_control.vhd proj/src/TopLevel/mux32to1.vhd proj/src/TopLevel/regN.vhd proj/src/TopLevel/dffg.vhd proj/src/TopLevel/control_unit.vhd proj/src/TopLevel/reg_file.vhd proj/src/TopLevel/alu.vhd proj/src/TopLevel/adder_subtractor.vhd proj/src/TopLevel/fetch_logic.vhd proj/src/TopLevel/testbench/alu_tb.vhd proj/src/TopLevel/testbench/fetch_logic_tb.vhd proj/src/TopLevel/testbench/reg_file_tb.vhd proj/src/TopLevel/testbench/barrel_shifter_tb.vhd proj/src/TopLevel/testbench/imm_gen_tb.vhd proj/src/TopLevel/testbench/adder_subtractor_tb.vhd proj/src/TopLevel/testbench/control_unit_tb.vhd proj/src/TopLevel/testbench/load_extender_tb.vhd proj/src/TopLevel/testbench/store_logic_tb.vhd proj/src/TopLevel/testbench/alu_control_tb.vhd proj/src/TopLevel/testbench/pc_reg_tb.vhd 
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling package RISCV_types
+-- Compiling package body RISCV_types
+-- Loading package RISCV_types
+-- Loading package std_logic_textio
+-- Loading package ENV
+-- Compiling entity tb
+-- Compiling architecture mixed of tb
+** Warning: proj/src/RISCV_types.vhd(15): (vcom-1615) Existing package 'RISCV_types' at line 18 will be overwritten.
+-- Compiling package RISCV_types
+** Warning: proj/src/RISCV_types.vhd(29): (vcom-1615) Existing package body 'RISCV_types(body)' at line 29 will be overwritten.
+-- Compiling package body RISCV_types
+-- Loading package RISCV_types
+-- Loading package NUMERIC_STD
+-- Compiling entity load_extender
+-- Compiling architecture behavioral of load_extender
+-- Compiling entity dec5to32
+-- Compiling architecture dataflow of dec5to32
+-- Compiling entity barrel_shifter
+-- Compiling architecture structural of barrel_shifter
+-- Compiling entity mem
+-- Compiling architecture rtl of mem
+-- Loading package RISCV_types
+-- Compiling entity RISCV_Processor
+-- Compiling architecture structure of RISCV_Processor
+-- Compiling entity pc_reg
+-- Compiling architecture behavior of pc_reg
+-- Compiling entity store_logic
+-- Compiling architecture behavior of store_logic
+-- Compiling entity imm_gen
+-- Compiling architecture behavior of imm_gen
+-- Compiling entity alu_control
+-- Compiling architecture behavior of alu_control
+-- Compiling entity mux32to1
+-- Compiling architecture dataflow of mux32to1
+-- Compiling entity regN
+-- Compiling architecture structural of regN
+-- Compiling entity dffg
+-- Compiling architecture mixed of dffg
+-- Compiling entity control_unit
+-- Compiling architecture behavior of control_unit
+-- Compiling entity reg_file
+-- Compiling architecture structural of reg_file
+-- Loading entity dec5to32
+-- Loading entity regN
+-- Loading entity mux32to1
+-- Compiling entity alu
+-- Compiling architecture structural of alu
+-- Compiling entity adder_subtractor
+-- Compiling architecture behavior of adder_subtractor
+-- Compiling entity fetch_logic
+-- Compiling architecture behavior of fetch_logic
+-- Compiling entity alu_tb
+-- Compiling architecture behavior of alu_tb
+-- Loading entity alu
+-- Compiling entity fetch_logic_tb
+-- Compiling architecture tb of fetch_logic_tb
+-- Loading entity fetch_logic
+-- Compiling entity reg_file_tb
+-- Compiling architecture behavior of reg_file_tb
+-- Loading entity reg_file
+-- Compiling entity barrel_shifter_tb
+-- Compiling architecture tb of barrel_shifter_tb
+-- Loading entity barrel_shifter
+-- Compiling entity imm_gen_tb
+-- Compiling architecture tb of imm_gen_tb
+-- Loading entity imm_gen
+-- Compiling entity adder_subtractor_tb
+-- Compiling architecture behavior of adder_subtractor_tb
+-- Compiling entity control_unit_tb
+-- Compiling architecture tb of control_unit_tb
+-- Loading entity control_unit
+-- Compiling entity load_extender_tb
+-- Compiling architecture tb of load_extender_tb
+-- Loading entity load_extender
+-- Compiling entity store_logic_tb
+-- Compiling architecture behavior of store_logic_tb
+-- Loading entity store_logic
+-- Compiling entity alu_control_tb
+-- Compiling architecture behavior of alu_control_tb
+-- Loading entity alu_control
+-- Compiling entity pc_reg_tb
+-- Compiling architecture behavior of pc_reg_tb
+End time: 22:40:54 on Nov 21,2025, Elapsed time: 0:00:00
+Errors: 0, Warnings: 2
