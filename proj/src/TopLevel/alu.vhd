@@ -57,6 +57,7 @@ architecture structural of alu is
     signal s_AdderCout  : std_logic; -- Internal signal for Cout
 
     signal s_SLT_Result : std_logic_vector(31 downto 0);
+    signal s_SLTU_Result : std_logic_vector(31 downto 0);
 
 begin
 
@@ -109,25 +110,54 @@ begin
     end process;
 
 
-    -----------------------------------------------------------------
-    -- 5. Final MUX & SLT Logic
-    -----------------------------------------------------------------
-    process(i_ALUCtrl, s_Sum, s_ShiftRes, s_LogicRes, s_SLT_Result)
+    process(i_ALUCtrl, i_A, i_B, s_Sum, s_ShiftRes, s_LogicRes)
     begin
-        -- SLT Logic
-        if s_Sum(31) = '1' then 
-            s_SLT_Result <= x"00000001";
-        else
-            s_SLT_Result <= x"00000000";
-        end if;
-        
-        -- Final Selection MUX
+        -- 기본값
+        s_FinalRes <= (others => '0');
+
         case i_ALUCtrl is
-            when "0010" | "0110" => s_FinalRes <= s_Sum;
-            when "0111" => s_FinalRes <= s_SLT_Result; 
-            when "1000" | "1001" | "1010" => s_FinalRes <= s_ShiftRes;
-            when "0000" | "0001" | "0100" => s_FinalRes <= s_LogicRes;
-            when others => s_FinalRes <= (others => '0');
+            ----------------------------------------------------------------
+            -- ADD / SUB
+            ----------------------------------------------------------------
+            when "0010" | "0110" =>
+                s_FinalRes <= s_Sum;
+
+            ----------------------------------------------------------------
+            -- SLT  (signed)
+            ----------------------------------------------------------------
+            when "0111" =>
+                if signed(i_A) < signed(i_B) then
+                    s_FinalRes <= (others => '0');
+                    s_FinalRes(0) <= '1';
+                else
+                    s_FinalRes <= (others => '0');
+                end if;
+
+            ----------------------------------------------------------------
+            -- SLTU (unsigned)  
+            ----------------------------------------------------------------
+            when "1100" =>
+                if unsigned(i_A) < unsigned(i_B) then
+                    s_FinalRes <= (others => '0');
+                    s_FinalRes(0) <= '1';
+                else
+                    s_FinalRes <= (others => '0');
+                end if;
+
+            ----------------------------------------------------------------
+            -- Shift
+            ----------------------------------------------------------------
+            when "1000" | "1001" | "1010" =>
+                s_FinalRes <= s_ShiftRes;
+
+            ----------------------------------------------------------------
+            -- Logic (AND/OR/XOR)
+            ----------------------------------------------------------------
+            when "0000" | "0001" | "0100" =>
+                s_FinalRes <= s_LogicRes;
+
+            when others =>
+                s_FinalRes <= (others => '0');
         end case;
     end process;
 
