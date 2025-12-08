@@ -7,7 +7,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity if_id_reg is
+entity fs_if_id_reg is
     port(
         i_CLK   : in  std_logic;                      -- Clock
         i_RST   : in  std_logic;                      -- Reset (High Active)
@@ -23,7 +23,7 @@ entity if_id_reg is
         o_PC    : out std_logic_vector(31 downto 0);  -- PC seen by ID
         o_Inst  : out std_logic_vector(31 downto 0)   -- Instruction seen by ID
     );
-end if_id_reg;
+end fs_if_id_reg;
 
 architecture behavior of if_id_reg is
 
@@ -45,15 +45,17 @@ begin
         elsif rising_edge(i_CLK) then
             -- 2) Flush has priority over Stall
             if(i_Flush = '1') then
-            s_PC_reg <= (others => '0');
-            s_Inst_reg <= C_NOP;
+                s_PC_reg <= (others => '0');
+                s_Inst_reg <= C_NOP;
             -- 3) Stall: hold current contents (do not latch new IF values) 
             elsif (i_Stall = '1') then
-            s_PC_reg <= s_PC_reg;
-            s_Inst_reg <= s_Inst_reg;
+                s_PC_reg <= s_PC_reg;
+                s_Inst_reg <= s_Inst_reg;
             -- Normal pipeline flow: latch IF outputs into IF/ID register
-            s_PC_reg   <= i_PC;
-            s_Inst_reg <= i_Inst;
+            else
+                s_PC_reg   <= i_PC;
+                s_Inst_reg <= i_Inst;
+            end if;
         end if;
     end process;
 

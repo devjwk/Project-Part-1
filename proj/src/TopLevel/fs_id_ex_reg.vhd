@@ -6,7 +6,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity id_ex_reg is
+entity fs_id_ex_reg is
     port(
         i_CLK      : in  std_logic;                      -- Clock
         i_RST      : in  std_logic;                      -- Reset (High Active)
@@ -38,6 +38,11 @@ entity id_ex_reg is
         i_Jump     : in  std_logic_vector(1 downto 0);   -- 00=none,01=JAL,10=JALR
         i_Halt     : in  std_logic;
 
+        -- for forward / hazard detection Logic
+        i_Rs1Addr  : in std_logic_vector(4 downto 0);
+        i_Rs2Addr  : in std_logic_vector(4 downto 0);
+
+
         -- To EX stage (outputs)
         o_PC       : out std_logic_vector(31 downto 0);
         o_ReadData1: out std_logic_vector(31 downto 0);
@@ -59,9 +64,11 @@ entity id_ex_reg is
 
         o_Branch   : out std_logic;
         o_Jump     : out std_logic_vector(1 downto 0);
-         o_Halt     : out std_logic
+        o_Halt     : out std_logic;
+        o_Rs1Addr  : out std_logic_vector(4 downto 0);
+        o_Rs2Addr  : out std_logic_vector(4 downto 0)
     );
-end id_ex_reg;
+end fs_id_ex_reg;
 
 architecture behavior of id_ex_reg is
 
@@ -89,12 +96,16 @@ architecture behavior of id_ex_reg is
     signal s_Jump_reg      : std_logic_vector(1 downto 0) := (others => '0');
     signal s_Halt_reg      : std_logic := '0';
 
+    -- Addr registers for hazard/forwarding
+    signal s_Rs1Addr_reg   : std_logic_vector(4 downto 0) := (others => '0');
+    signal s_Rs2Addr_reg   : std_logic_vector(4 downto 0) := (others => '0');
+
 begin
 
     process(i_CLK, i_RST)
     begin
         if (i_RST = '1') then
-            -- On reset: clear everything to a "safe NOP" state
+            -- Reset: safe NOP/bubble state
             s_PC_reg        <= (others => '0');
             s_ReadData1_reg <= (others => '0');
             s_ReadData2_reg <= (others => '0');
@@ -102,6 +113,9 @@ begin
             s_Funct3_reg    <= (others => '0');
             s_Funct7_reg    <= (others => '0');
             s_Rd_reg        <= (others => '0');
+
+            s_Rs1Addr_reg   <= (others => '0');
+            s_Rs2Addr_reg   <= (others => '0');
 
             s_ALUSrcA_reg   <= '0';
             s_ALUSrcB_reg   <= '0';
@@ -116,11 +130,13 @@ begin
             s_Branch_reg    <= '0';
             s_Jump_reg      <= (others => '0');
             s_Halt_reg      <= '0';
+
         elsif rising_edge(i_CLK) then
-            -- 우선순위: FLUSH > STALL > NORMAL
+
+            -- Priority: FLUSH > STALL > NORMAL
             if (i_Flush = '1') then
-                -- FLUSH: 버블 삽입 (EX 스테이지에서 아무 일 안 나게)
-                s_PC_reg        <= (others => '0');      -- don't-care, 0으로
+                -- Bubble insert
+                s_PC_reg        <= (others => '0');
                 s_ReadData1_reg <= (others => '0');
                 s_ReadData2_reg <= (others => '0');
                 s_Imm_reg       <= (others => '0');
@@ -128,7 +144,9 @@ begin
                 s_Funct7_reg    <= (others => '0');
                 s_Rd_reg        <= (others => '0');
 
-                -- 컨트롤: 전부 비활성화
+                s_Rs1Addr_reg   <= (others => '0');
+                s_Rs2Addr_reg   <= (others => '0');
+
                 s_ALUSrcA_reg   <= '0';
                 s_ALUSrcB_reg   <= '0';
                 s_ALUOp_reg     <= (others => '0');
@@ -144,7 +162,7 @@ begin
                 s_Halt_reg      <= '0';
 
             elsif (i_Stall = '1') then
-                -- STALL: 현재 값 유지 (아무것도 안 함)
+                -- Hold state (explicitly include addr regs)
                 s_PC_reg        <= s_PC_reg;
                 s_ReadData1_reg <= s_ReadData1_reg;
                 s_ReadData2_reg <= s_ReadData2_reg;
@@ -152,6 +170,9 @@ begin
                 s_Funct3_reg    <= s_Funct3_reg;
                 s_Funct7_reg    <= s_Funct7_reg;
                 s_Rd_reg        <= s_Rd_reg;
+
+                s_Rs1Addr_reg   <= s_Rs1Addr_reg;
+                s_Rs2Addr_reg   <= s_Rs2Addr_reg;
 
                 s_ALUSrcA_reg   <= s_ALUSrcA_reg;
                 s_ALUSrcB_reg   <= s_ALUSrcB_reg;
@@ -168,7 +189,7 @@ begin
                 s_Halt_reg      <= s_Halt_reg;
 
             else
-                -- NORMAL: ID 단계에서 넘어온 값 그대로 래치
+                -- Normal latch
                 s_PC_reg        <= i_PC;
                 s_ReadData1_reg <= i_ReadData1;
                 s_ReadData2_reg <= i_ReadData2;
@@ -176,6 +197,9 @@ begin
                 s_Funct3_reg    <= i_Funct3;
                 s_Funct7_reg    <= i_Funct7;
                 s_Rd_reg        <= i_Rd;
+
+                s_Rs1Addr_reg   <= i_Rs1Addr;
+                s_Rs2Addr_reg   <= i_Rs2Addr;
 
                 s_ALUSrcA_reg   <= i_ALUSrcA;
                 s_ALUSrcB_reg   <= i_ALUSrcB;
@@ -194,7 +218,7 @@ begin
         end if;
     end process;
 
-    -- Drive outputs to EX stage
+    -- Outputs
     o_PC        <= s_PC_reg;
     o_ReadData1 <= s_ReadData1_reg;
     o_ReadData2 <= s_ReadData2_reg;
@@ -217,5 +241,8 @@ begin
     o_Jump      <= s_Jump_reg;
 
     o_Halt      <= s_Halt_reg;
+
+    o_Rs1Addr   <= s_Rs1Addr_reg;
+    o_Rs2Addr   <= s_Rs2Addr_reg;
 
 end behavior;

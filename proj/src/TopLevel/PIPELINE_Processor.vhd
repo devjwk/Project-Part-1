@@ -141,6 +141,17 @@ architecture structure of RISCV_Processor is
     signal s_Halt_MEM : std_logic;
     signal s_Halt_WB  : std_logic;
 
+    --source addr
+    signal s_Rs1Addr_ID : std_logic_vector(4 downto 0);
+    signal s_Rs2Addr_ID : std_logic_vector(4 downto 0);
+
+    signal s_Rs1Addr_EX : std_logic_vector(4 downto 0);
+    signal s_Rs2Addr_EX: std_logic_vector(4 downto 0);
+
+    signal s_Stall_IFID : std_logic := '0';
+    signal s_Flush_IFID : std_logic := '0';
+    signal s_Stall_IDEX : std_logic := '0';
+    signal s_Flush_IDEX : std_logic := '0';
     -- ======================================================================
     -- Component Declarations
     -- ======================================================================
@@ -265,6 +276,8 @@ architecture structure of RISCV_Processor is
     port(
         i_CLK  : in  std_logic;
         i_RST  : in  std_logic;
+        i_Stall : in std_logic;
+        i_Flush : in std_logic;
         i_PC   : in  std_logic_vector(31 downto 0);
         i_Inst : in  std_logic_vector(31 downto 0);
         o_PC   : out std_logic_vector(31 downto 0);
@@ -276,7 +289,8 @@ architecture structure of RISCV_Processor is
     port(
         i_CLK       : in  std_logic;
         i_RST       : in  std_logic;
-
+        i_Stall     : in  std_logic;
+        i_Flush     : in  std_logic;
         -- From ID stage
         i_PC        : in  std_logic_vector(31 downto 0);
         i_ReadData1 : in  std_logic_vector(31 downto 0);
@@ -286,6 +300,8 @@ architecture structure of RISCV_Processor is
         i_Funct7    : in  std_logic_vector(6 downto 0);
         i_Rd        : in  std_logic_vector(4 downto 0);
 
+        i_Rs1Addr   : in std_logic_vector(4 downto 0);
+        i_Rs2Addr   : in std_logic_vector(4 downto 0);
         i_MemRead   : in  std_logic;
         i_MemWrite  : in  std_logic;
         i_RegWrite  : in  std_logic;
@@ -305,6 +321,9 @@ architecture structure of RISCV_Processor is
         o_Funct3    : out std_logic_vector(2 downto 0);
         o_Funct7    : out std_logic_vector(6 downto 0);
         o_Rd        : out std_logic_vector(4 downto 0);
+
+        o_Rs1Addr  : out std_logic_vector(4 downto 0);
+        o_Rs2Addr  : out std_logic_vector(4 downto 0);
 
         o_MemRead   : out std_logic;
         o_MemWrite  : out std_logic;
@@ -432,6 +451,8 @@ begin
         port map(
             i_CLK  => iCLK,
             i_RST  => iRST,
+            i_Stall => s_Stall_IFID,
+            i_Flush => s_Flush_IFID,
             i_PC   => s_CurrentPC,          -- PC from pc_reg (IF)
             i_Inst => s_Inst(31 downto 0),  -- Instruction from IMem (IF)
             o_PC   => s_PC_ID,              -- PC seen by ID stage
@@ -443,6 +464,10 @@ begin
     -- ======================================================================
     s_Funct3 <= s_Inst_ID(14 downto 12);
     s_Funct7 <= s_Inst_ID(31 downto 25);
+
+    --extract ADDR
+    s_Rs1Addr_ID <= s_Inst_ID(19 downto 15);
+    s_Rs2Addr_ID <= s_Inst_ID(24 downto 20);
 
     s_Halt_ID <= '1' when s_Inst_ID(6 downto 0) = "0000000" else '0';
 
@@ -527,6 +552,8 @@ begin
             i_CLK       => iCLK,
             i_RST       => iRST,
 
+            i_Stall     => s_Stall_IDEX,
+            i_Flush     => s_Flush_IDEX,
             -- From ID stage
             i_PC        => s_PC_ID,
             i_ReadData1 => s_ReadData1,
@@ -535,6 +562,9 @@ begin
             i_Funct3    => s_Funct3,
             i_Funct7    => s_Funct7,
             i_Rd        => s_RegWrAddr,
+
+            i_Rs1Addr   => s_Rs1Addr_ID,
+            i_Rs2Addr   => s_Rs2Addr_ID,
 
             i_MemRead   => s_MemRead,
             i_MemWrite  => s_DMemWr,
@@ -565,7 +595,9 @@ begin
             o_ALUOp     => s_ALUOp_EX,
             o_Branch    => s_Branch_EX,
             o_Jump      => s_Jump_EX,
-            o_Halt      => s_Halt_EX
+            o_Halt      => s_Halt_EX,
+            o_Rs1Addr   => s_Rs1Addr_EX,
+            o_Rs2Addr   => s_Rs2Addr_EX
     );
 
     -- ======================================================================

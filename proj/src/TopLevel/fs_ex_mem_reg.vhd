@@ -6,7 +6,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity ex_mem_reg is
+entity fs_ex_mem_reg is
     port(
         i_CLK       : in  std_logic;                      -- Clock
         i_RST       : in  std_logic;                      -- Reset (High Active)
@@ -42,9 +42,9 @@ entity ex_mem_reg is
         o_MemWrite  : out std_logic;
         o_RegWrite  : out std_logic;
         o_MemtoReg  : out std_logic_vector(1 downto 0);
-        o_Halt      : out  std_logic;
+        o_Halt      : out  std_logic
     );
-end ex_mem_reg;
+end fs_ex_mem_reg;
 
 architecture behavior of ex_mem_reg is
 

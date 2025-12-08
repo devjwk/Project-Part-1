@@ -7,7 +7,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity mem_wb_reg is
+entity fs_mem_wb_reg is
     port(
         i_CLK        : in  std_logic;                      -- Clock
         i_RST        : in  std_logic;                      -- Reset (High Active)
@@ -41,7 +41,7 @@ entity mem_wb_reg is
 
         o_Halt       : out std_logic
     );
-end mem_wb_reg;
+end fs_mem_wb_reg;
 
 architecture behavior of mem_wb_reg is
 
