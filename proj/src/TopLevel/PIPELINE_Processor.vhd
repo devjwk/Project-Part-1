@@ -152,6 +152,18 @@ architecture structure of RISCV_Processor is
     signal s_Flush_IFID : std_logic := '0';
     signal s_Stall_IDEX : std_logic := '0';
     signal s_Flush_IDEX : std_logic := '0';
+
+    -- forwarding select
+    signal s_ForwardA    : std_logic_vector(1 downto 0);
+    signal s_ForwardB    : std_logic_vector(1 downto 0);
+    signal s_StoreFwd_EX : std_logic_vector(1 downto 0);
+
+    -- forwarded data
+    signal s_FwdA_Data   : std_logic_vector(31 downto 0);
+    signal s_FwdB_Data   : std_logic_vector(31 downto 0);
+    signal s_StoreData_EX_Fwd : std_logic_vector(31 downto 0);
+
+
     -- ======================================================================
     -- Component Declarations
     -- ======================================================================
@@ -401,6 +413,22 @@ architecture structure of RISCV_Processor is
         o_Halt      : out std_logic
     );
     end component;
+    component forwarding_unit_all is
+    port(
+        i_Rs1Addr_EX   : in  std_logic_vector(4 downto 0);
+        i_Rs2Addr_EX   : in  std_logic_vector(4 downto 0);
+
+        i_Rd_MEM       : in  std_logic_vector(4 downto 0);
+        i_RegWrite_MEM : in  std_logic;
+
+        i_Rd_WB        : in  std_logic_vector(4 downto 0);
+        i_RegWrite_WB  : in  std_logic;
+
+        o_ForwardA     : out std_logic_vector(1 downto 0);
+        o_ForwardB     : out std_logic_vector(1 downto 0);
+        o_StoreFwd_EX  : out std_logic_vector(1 downto 0)
+    );
+    end component;
 
 begin
 
@@ -564,7 +592,7 @@ begin
             i_Rd        => s_RegWrAddr,
 
             i_Rs1Addr   => s_Rs1Addr_ID,
-            i_Rs2Addr   => s_Rs2Addr_ID,
+            i_Rs2Addr   => s_Rs2Addr_ID,4
 
             i_MemRead   => s_MemRead,
             i_MemWrite  => s_DMemWr,
@@ -600,14 +628,41 @@ begin
             o_Rs2Addr   => s_Rs2Addr_EX
     );
 
+    U_FWD : forwarding_unit_all
+    port map(
+        i_Rs1Addr_EX   => s_Rs1Addr_EX,
+        i_Rs2Addr_EX   => s_Rs2Addr_EX,
+
+        i_Rd_MEM       => s_Rd_MEM,
+        i_RegWrite_MEM => s_RegWrite_MEM,
+
+        i_Rd_WB        => s_Rd_WB,
+        i_RegWrite_WB  => s_RegWrite_WB,
+
+        o_ForwardA     => s_ForwardA,
+        o_ForwardB     => s_ForwardB,
+        o_StoreFwd_EX  => s_StoreFwd_EX
+    );
+
     -- ======================================================================
     -- ALU Section(EX stage)
     -- ======================================================================
-    -- MUX A
-    s_ALUInputA <= s_PC_EX      when s_ALUSrcA_EX = '1' else s_ReadData1_EX;
-    
-    -- MUX B
-    s_ALUInputB <= s_Imm_EX     when s_ALUSrcB_EX = '1' else s_ReadData2_EX;
+    -- Forwarded base for Rs1
+    with s_ForwardA select
+        s_FwdA_Data <= s_ReadData1_EX   when "00",
+                    s_RegWrData      when "01", -- MEM/WB
+                    s_ALUResult_MEM  when "10", -- EX/MEM
+                    s_ReadData1_EX   when others;
+
+    -- Forwarded base for Rs2
+    with s_ForwardB select
+        s_FwdB_Data <= s_ReadData2_EX   when "00",
+                    s_RegWrData      when "01",
+                    s_ALUResult_MEM  when "10",
+                    s_ReadData2_EX   when others;
+
+    s_ALUInputA <= s_PC_EX  when s_ALUSrcA_EX = '1' else s_FwdA_Data;
+    s_ALUInputB <= s_Imm_EX when s_ALUSrcB_EX = '1' else s_FwdB_Data;
 
     U_ALUCTRL : alu_control
         port map(
@@ -636,7 +691,7 @@ begin
             -- From EX stage
             i_PC        => s_PC_EX,
             i_ALUResult => s_ALUResult,
-            i_ReadData2 => s_ReadData2_EX,
+            i_ReadData2 => s_StoreData_EX_Fwd,
             i_Funct3    => s_Funct3_EX,
             i_Rd        => s_Rd_EX,
             i_Imm       => s_Imm_EX,
@@ -662,6 +717,11 @@ begin
             o_Halt      => s_Halt_MEM
 
         );
+    with s_StoreFwd_EX select
+    s_StoreData_EX_Fwd <= s_ReadData2_EX  when "00",
+                          s_RegWrData     when "01",
+                          s_ALUResult_MEM when "10",
+                          s_ReadData2_EX  when others;
 
     s_DMemAddr <= s_ALUResult_MEM; 
     s_ByteOffset <= s_ALUResult(1 downto 0);

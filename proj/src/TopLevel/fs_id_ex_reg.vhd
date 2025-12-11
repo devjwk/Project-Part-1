@@ -70,7 +70,7 @@ entity fs_id_ex_reg is
     );
 end fs_id_ex_reg;
 
-architecture behavior of id_ex_reg is
+architecture behavior of fs_id_ex_reg is
 
     -- Datapath registers
     signal s_PC_reg        : std_logic_vector(31 downto 0) := (others => '0');

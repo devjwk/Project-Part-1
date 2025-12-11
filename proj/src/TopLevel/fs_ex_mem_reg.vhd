@@ -14,7 +14,8 @@ entity fs_ex_mem_reg is
         -- New pipeline control signals
         i_Stall     : in  std_logic;                      -- 1 = hold current values
         i_Flush     : in  std_logic; 
-
+        -- Store-data forwarding signals
+        i_Rs2Addr   : in  std_logic_vector(4 downto 0);
         -- From EX stage (inputs)
         i_PC        : in  std_logic_vector(31 downto 0);  -- PC associated with this instruction
         i_ALUResult : in  std_logic_vector(31 downto 0);  -- ALU result (addr or arithmetic)
@@ -38,6 +39,8 @@ entity fs_ex_mem_reg is
         o_Funct3    : out std_logic_vector(2 downto 0);
         o_Rd        : out std_logic_vector(4 downto 0);
 
+        o_Rs2Addr   : out  std_logic_vector(4 downto 0);
+
         o_MemRead   : out std_logic;
         o_MemWrite  : out std_logic;
         o_RegWrite  : out std_logic;
@@ -46,7 +49,7 @@ entity fs_ex_mem_reg is
     );
 end fs_ex_mem_reg;
 
-architecture behavior of ex_mem_reg is
+architecture behavior of fs_ex_mem_reg is
 
     -- Datapath registers
     signal s_PC_reg        : std_logic_vector(31 downto 0) := (others => '0');
@@ -63,6 +66,9 @@ architecture behavior of ex_mem_reg is
     signal s_MemtoReg_reg  : std_logic_vector(1 downto 0) := (others => '0');
     signal s_Halt_reg      : std_logic := '0';
 
+    --internal registers for store-forwarding
+    signal s_Rs2Addr_reg   : std_logic_vector(4 downto 0) := (others => '0');
+
 begin
 
     process(i_CLK, i_RST)
@@ -75,6 +81,8 @@ begin
             s_Imm_reg       <= (others => '0');
             s_Funct3_reg    <= (others => '0');
             s_Rd_reg        <= (others => '0');
+
+            s_Rs2Addr_reg   <= (others => '0');
 
             s_MemRead_reg   <= '0';
             s_MemWrite_reg  <= '0';
@@ -94,6 +102,8 @@ begin
                 s_Funct3_reg    <= (others => '0');
                 s_Rd_reg        <= (others => '0');
 
+                s_Rs2Addr_reg   <= (others => '0');
+
                 s_MemRead_reg   <= '0';
                 s_MemWrite_reg  <= '0';
                 s_RegWrite_reg  <= '0';
@@ -109,6 +119,8 @@ begin
                 s_Funct3_reg    <= s_Funct3_reg;
                 s_Rd_reg        <= s_Rd_reg;
 
+                s_Rs2Addr_reg   <= s_Rs2Addr_reg;
+
                 s_MemRead_reg   <= s_MemRead_reg;
                 s_MemWrite_reg  <= s_MemWrite_reg;
                 s_RegWrite_reg  <= s_RegWrite_reg;
@@ -123,6 +135,8 @@ begin
                 s_Imm_reg       <= i_Imm;
                 s_Funct3_reg    <= i_Funct3;
                 s_Rd_reg        <= i_Rd;
+
+                s_Rs2Addr_reg   <= i_Rs2Addr;
 
                 s_MemRead_reg   <= i_MemRead;
                 s_MemWrite_reg  <= i_MemWrite;
@@ -141,6 +155,8 @@ begin
     o_Imm       <= s_Imm_reg;
     o_Funct3    <= s_Funct3_reg;
     o_Rd        <= s_Rd_reg;
+
+    o_Rs2Addr   <= s_Rs2Addr_reg;
 
     o_MemRead   <= s_MemRead_reg;
     o_MemWrite  <= s_MemWrite_reg;

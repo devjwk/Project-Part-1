@@ -9,7 +9,7 @@ entity fetch_logic is
     generic(N : integer := 32);
     port(
         -- Data Inputs
-        i_PC        : in std_logic_vector(N-1 downto 0); 
+        i_PC_        : in std_logic_vector(N-1 downto 0); 
         i_Imm       : in std_logic_vector(N-1 downto 0); 
         i_RS1       : in std_logic_vector(N-1 downto 0); -- JALR Base Address
         

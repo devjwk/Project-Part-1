@@ -43,7 +43,7 @@ entity fs_mem_wb_reg is
     );
 end fs_mem_wb_reg;
 
-architecture behavior of mem_wb_reg is
+architecture behavior of fs_mem_wb_reg is
 
     -- Datapath registers
     signal s_PC_reg        : std_logic_vector(31 downto 0) := (others => '0');

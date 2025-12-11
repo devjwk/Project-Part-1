@@ -25,7 +25,7 @@ entity fs_if_id_reg is
     );
 end fs_if_id_reg;
 
-architecture behavior of if_id_reg is
+architecture behavior of fs_if_id_reg is
 
     signal s_PC_reg   : std_logic_vector(31 downto 0) := (others => '0');
     signal s_Inst_reg : std_logic_vector(31 downto 0) := (others => '0');

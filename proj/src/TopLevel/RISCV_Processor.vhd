@@ -81,7 +81,7 @@ architecture structure of RISCV_Processor is
     signal s_ALUResult : std_logic_vector(31 downto 0); -- Internal ALU Result
     
     signal s_Zero      : std_logic;
-    signal s_Sign      : std_logic;
+    signal s_Sign      : s0td_logic;
     signal s_Cout      : std_logic;
 
     signal s_ReadData2 : std_logic_vector(31 downto 0); -- 이 줄을 반드시 추가!
@@ -384,15 +384,6 @@ begin
     s_Ovfl <= '0'; 
 
     -- 2. Halt Logic (FIXED: Prevents premature exit during reset)
-    process(s_Inst, iRST)
-    begin
-        if (iRST = '1') then
-            s_Halt <= '0';
-        elsif (s_Inst(6 downto 0)) = "0000000" then
-            s_Halt <= '1';
-        else
-            s_Halt <= '0';
-        end if;
-    end process;
+   
 
 end structure;

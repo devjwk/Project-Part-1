@@ -6,8 +6,7 @@ entity hazard_detection_unit is
         -- ID stage instruction (consumer side)
         i_Inst_ID      : in  std_logic_vector(31 downto 0);
 
-        -- EX stage signals (producer side)
-        i_MemRead_EX   : in  std_logic;  -- 1 when EX-stage instr is a load
+        i_MemRead_EX   : in  std_logic;
         i_Rd_EX        : in  std_logic_vector(4 downto 0);
 
         -- Outputs (classic control)
@@ -15,8 +14,7 @@ entity hazard_detection_unit is
         o_IFID_Write   : out std_logic;  -- 1 = allow IF/ID reg write
         o_IDEX_Flush   : out std_logic;  -- 1 = insert bubble into ID/EX
 
-        -- Optional convenience
-        o_LoadUse      : out std_logic
+        o_DataHazard   : out std_logic
     );
 end hazard_detection_unit;
 
@@ -30,9 +28,8 @@ architecture rtl of hazard_detection_unit is
     -- Use flags (generalized form)
     signal s_UseRs1_ID  : std_logic;
     signal s_UseRs2_ID  : std_logic;
-
-    -- Load-use hazard internal
-    signal s_LoadUse    : std_logic;
+    
+    signal s_DataHaz    : std_logic;
 
 begin
 
@@ -69,11 +66,11 @@ begin
 
             when "0010011" =>  -- I-type ALU
                 s_UseRs1_ID <= '1';
-                s_UseRs2_ID <= '0';
+                
 
             when "0000011" =>  -- LOAD
                 s_UseRs1_ID <= '1';
-                s_UseRs2_ID <= '0';
+                
 
             when "0100011" =>  -- STORE
                 s_UseRs1_ID <= '1';
@@ -85,12 +82,10 @@ begin
 
             when "1100111" =>  -- JALR
                 s_UseRs1_ID <= '1';
-                s_UseRs2_ID <= '0';
+                
 
             when others =>
-                -- LUI, AUIPC, JAL, SYSTEM, etc.
-                s_UseRs1_ID <= '0';
-                s_UseRs2_ID <= '0';
+                null;
         end case;
     end process;
 
@@ -102,7 +97,8 @@ begin
     --   ((UseRs1_ID and Rd_EX = Rs1Addr_ID) or
     --    (UseRs2_ID and Rd_EX = Rs2Addr_ID))
     -------------------------------------------------------------------------
-    s_LoadUse <= '1' when (
+    -- Load-use only
+    s_DataHaz <= '1' when (
         i_MemRead_EX = '1' and
         i_Rd_EX /= "00000" and
         (
@@ -110,14 +106,13 @@ begin
             (s_UseRs2_ID = '1' and i_Rd_EX = s_Rs2Addr_ID)
         )
     ) else '0';
-
     -------------------------------------------------------------------------
     -- Classic stall control outputs
     -------------------------------------------------------------------------
-    o_PCWrite    <= not s_LoadUse;
-    o_IFID_Write <= not s_LoadUse;
-    o_IDEX_Flush <= s_LoadUse;
+    o_PCWrite    <= not s_DataHaz;
+    o_IFID_Write <= not s_DataHaz;
+    o_IDEX_Flush <= s_DataHaz;
 
-    o_LoadUse    <= s_LoadUse;
+    o_DataHazard    <= s_DataHaz;
 
 end rtl;

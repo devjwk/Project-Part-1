@@ -23,7 +23,7 @@ entity control_unit is
     );
 end control_unit;
 
-architecture behavior of control_unit is
+architecture behavior of control_unit isㄷ
 begin
     process(i_Opcode)
     begin

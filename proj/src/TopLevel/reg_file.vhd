@@ -23,6 +23,9 @@ architecture structural of reg_file is
     signal s_regs    : std_logic_vector(32*32-1 downto 0); 
     signal s_we      : std_logic_vector(31 downto 0);  
 
+    signal s_rdata1_raw : std_logic_vector(31 downto 0);
+    signal s_rdata2_raw : std_logic_vector(31 downto 0);
+ 
 begin
     -- decorder: write address -> one-hot
     u_dec: entity work.dec5to32
@@ -54,7 +57,7 @@ begin
         port map (
             data_in => s_regs,
             sel     => i_RADDR1,
-            y_out   => o_RDATA1
+            y_out   => s_rdata1_raw
         );
 
    
@@ -62,7 +65,17 @@ begin
         port map (
             data_in => s_regs,
             sel     => i_RADDR2,
-            y_out   => o_RDATA2
+            y_out   => s_rdata2_raw
         );
+
+    -- ★ bypass / read-after-write in same cycle
+    o_RDATA1 <= (others => '0') when i_RADDR1 = "00000" else
+                i_WDATA when (i_WE = '1' and i_WADDR /= "00000" and i_WADDR = i_RADDR1) else
+                s_rdata1_raw;
+
+    o_RDATA2 <= (others => '0') when i_RADDR2 = "00000" else
+                i_WDATA when (i_WE = '1' and i_WADDR /= "00000" and i_WADDR = i_RADDR2) else
+                s_rdata2_raw;
+
 
 end architecture;
