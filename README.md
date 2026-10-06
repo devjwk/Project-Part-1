@@ -51,13 +51,12 @@ Source is in `proj/src/TopLevel/`, testbenches in `proj/test/`.
 
 ```mermaid
 flowchart LR
-    IF["IF · fetch"] --> R1(["IF/ID"]) --> ID["ID · decode, register read"] --> R2(["ID/EX"]) --> EX["EX · ALU"] --> R3(["EX/MEM"]) --> MEM["MEM · data memory"] --> R4(["MEM/WB"]) --> WB["WB · write back"]
+    IF["IF<br/>fetch"] -->|"IF/ID"| ID["ID<br/>decode"] -->|"ID/EX"| EX["EX<br/>ALU"] -->|"EX/MEM"| MEM["MEM<br/>data memory"] -->|"MEM/WB"| WB["WB<br/>write back"]
     WB -.->|"register write"| ID
-    R3 -.->|"forward"| EX
-    R4 -.->|"forward"| EX
-    HZ{{"Hazard detection"}} -.->|"stall"| R1
-    CH{{"Control hazard unit"}} -.->|"flush"| R1
-    CH -.->|"flush"| R2
+    MEM -.->|"forward"| EX
+    WB -.->|"forward"| EX
+    HZ{{"Hazard detection"}} -.->|"stall"| IF
+    CH{{"Control hazard unit"}} -.->|"flush"| ID
 ```
 
 ## My role
