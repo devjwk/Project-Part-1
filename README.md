@@ -26,6 +26,7 @@ Iowa State University · CprE 381 · Project Group F_04
 | Clock period | Max frequency | CPI · Mergesort | Mergesort |
 | :---: | :---: | :---: | :---: |
 | **25.43 ns** | **39.33 MHz** | **1.31** | **56,327 ns** |
+
 | | |
 |---|---|
 | Period | November – December 2025 |
