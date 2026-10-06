@@ -1,9 +1,31 @@
-# RISC-V Hardware-Scheduled Pipeline (CprE 381, final project state)
+<div align="center">
 
-A five-stage pipelined RV32I processor in VHDL with forwarding, stalling and flushing, plus the benchmark comparison of all three processors from the term project.
+# RISC-V PIPELINE · HARDWARE-SCHEDULED
 
-> The repository name is historical. It began as Part 1 and now holds the final hardware-scheduled pipeline.
+### Forwarding, stalling and flushing, so unmodified programs just run
 
+**VHDL · RV32I · QuestaSim · Quartus**
+
+![RTL](https://img.shields.io/badge/RTL-VHDL-6366F1?style=flat-square)
+![ISA](https://img.shields.io/badge/ISA-RV32I-0F172A?style=flat-square)
+![Fmax](https://img.shields.io/badge/Fmax-39.33%20MHz-0891B2?style=flat-square)
+![Stage](https://img.shields.io/badge/Stage-3%20of%203-F59E0B?style=flat-square)
+
+Iowa State University · CprE 381 · Project Group F_04
+
+[Overview](#overview) · [Pipeline with hazard handling](#pipeline-with-hazard-handling) · [My role](#my-role) · [Results](#results) · [Limitations](#limitations-and-next-steps)
+
+</div>
+
+---
+
+> **Where it stands — Complete**  
+> Finishes Mergesort about 20% faster than the single-cycle processor.  
+> It misses the 20 ns clock constraint by 5.43 ns; the critical path is described under Limitations.
+
+| Clock period | Max frequency | CPI · Mergesort | Mergesort |
+| :---: | :---: | :---: | :---: |
+| **25.43 ns** | **39.33 MHz** | **1.31** | **56,327 ns** |
 | | |
 |---|---|
 | Period | November – December 2025 |
@@ -23,6 +45,19 @@ A five-stage pipelined RV32I processor in VHDL with forwarding, stalling and flu
 | Taken branch or jump | Flush the wrongly fetched instructions | `contro_hazard_unit.vhd` |
 
 Source is in `proj/src/TopLevel/`, testbenches in `proj/test/`.
+
+## Pipeline with hazard handling
+
+```mermaid
+flowchart LR
+    IF["IF · fetch"] --> R1(["IF/ID"]) --> ID["ID · decode, register read"] --> R2(["ID/EX"]) --> EX["EX · ALU"] --> R3(["EX/MEM"]) --> MEM["MEM · data memory"] --> R4(["MEM/WB"]) --> WB["WB · write back"]
+    WB -.->|"register write"| ID
+    R3 -.->|"forward"| EX
+    R4 -.->|"forward"| EX
+    HZ{{"Hazard detection"}} -.->|"stall"| R1
+    CH{{"Control hazard unit"}} -.->|"flush"| R1
+    CH -.->|"flush"| R2
+```
 
 ## My role
 
