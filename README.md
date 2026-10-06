@@ -1,15 +1,11 @@
 <div align="center">
 
-# RISC-V PIPELINE · HARDWARE-SCHEDULED
+<img src="assets/banner.svg" alt="RISC-V PIPELINE · HARDWARE-SCHEDULED — Forwarding, stalling and flushing, so unmodified programs just run" width="100%">
 
-### Forwarding, stalling and flushing, so unmodified programs just run
-
-**VHDL · RV32I · QuestaSim · Quartus**
-
-![RTL](https://img.shields.io/badge/RTL-VHDL-6366F1?style=flat-square)
-![ISA](https://img.shields.io/badge/ISA-RV32I-0F172A?style=flat-square)
-![Fmax](https://img.shields.io/badge/Fmax-39.33%20MHz-0891B2?style=flat-square)
-![Stage](https://img.shields.io/badge/Stage-3%20of%203-F59E0B?style=flat-square)
+![RTL](https://img.shields.io/badge/RTL-VHDL-283272?style=flat-square&labelColor=10163F)
+![ISA](https://img.shields.io/badge/ISA-RV32I-10163F?style=flat-square&labelColor=10163F)
+![Fmax](https://img.shields.io/badge/Fmax-39.33%20MHz-B77F00?style=flat-square&labelColor=10163F)
+![Stage](https://img.shields.io/badge/Stage-3%20of%203-3B4BA8?style=flat-square&labelColor=10163F)
 
 Iowa State University · CprE 381 · Project Group F_04
 
@@ -50,6 +46,7 @@ Source is in `proj/src/TopLevel/`, testbenches in `proj/test/`.
 ## Pipeline with hazard handling
 
 ```mermaid
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#283272", "primaryTextColor": "#ffffff", "primaryBorderColor": "#10163F", "lineColor": "#94A3B8", "secondaryColor": "#283272", "tertiaryColor": "#10163F", "clusterBkg": "#F8FAFC", "clusterBorder": "#94A3B8", "edgeLabelBackground": "#F1F5F9", "fontFamily": "ui-sans-serif, system-ui, sans-serif"}}}%%
 flowchart LR
     IF["IF<br/>fetch"] -->|"IF/ID"| ID["ID<br/>decode"] -->|"ID/EX"| EX["EX<br/>ALU"] -->|"EX/MEM"| MEM["MEM<br/>data memory"] -->|"MEM/WB"| WB["WB<br/>write back"]
     WB -.->|"register write"| ID
